@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 
 app.use(bodyParser.json());
+app.use(express.static("build"));
 
 morgan.token("body", (req) => JSON.stringify(req.body));
 morgan.format("tinyWithBody",
@@ -109,7 +110,7 @@ app.get("/info", (request, response) => {
     <p>Current date: ${new Date()}`);
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Running on ${PORT}`);
 });

@@ -25,8 +25,15 @@ const persons = [
 ];
 
 app.get("/api/persons", (request, response) => {
-    console.log("Got request")
+    console.log("Got request for persons");
     response.json(persons);
+});
+
+app.get("/info", (request, response) => {
+    console.log("Got request for info page");
+    response.send(`
+    <p> Phonebook currently contains details of ${persons.length} people</p>
+    <p>Current date: ${new Date()}`);
 });
 
 const PORT = 3001;

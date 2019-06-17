@@ -4,7 +4,20 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 
 app.use(bodyParser.json());
-app.use(morgan("tiny"));
+
+morgan.token("body", (req) => JSON.stringify(req.body));
+morgan.format("tinyWithBody",
+ ":method :url :status :res[content-length] - :response-time ms :body");
+
+// non-POST logging
+app.use(morgan("tiny", {
+    skip: (req, res) => {
+        return req.method === "POST";
+    }
+}));
+
+// POST logging
+app.use(morgan("tinyWithBody", {skip: (req, res) => req.method !== "POST"}));
 
 let persons = [
     {
@@ -52,19 +65,19 @@ app.post("/api/persons/", (request, response) => {
 
     if (receivedPerson.name === undefined) {
         console.log("Denied due to missing name");
-        response.status(400).json({error: "Name undefined or missing"});
+        response.status(400).json({ error: "Name undefined or missing" });
         return;
     }
     if (receivedPerson.number === undefined) {
         console.log("Denied due to missing number");
-        response.status(400).json({error: "Number undefined or missing"});
+        response.status(400).json({ error: "Number undefined or missing" });
         return;
     }
-    const found = persons.find(p => 
+    const found = persons.find(p =>
         p.name.toUpperCase() === receivedPerson.name.toUpperCase());
     if (found !== undefined) {
         console.log("Denied due to already existing name", found);
-        response.status(409).json({error: "Name already exists"});
+        response.status(409).json({ error: "Name already exists" });
         return;
     }
 

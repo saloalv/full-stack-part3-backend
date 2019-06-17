@@ -1,5 +1,8 @@
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.json());
 
 let persons = [
     {
@@ -40,6 +43,22 @@ app.get("/api/persons/:id", (request, response) => {
         response.sendStatus(404);
     }
 })
+
+app.post("/api/persons/", (request, response) => {
+    const receivedPerson = request.body;
+    console.log("Received person", receivedPerson);
+
+    // defensively creating new person so that user can't sneak anything in
+    const newPerson = {
+        name: receivedPerson.name,
+        number: receivedPerson.number,
+        id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
+    }
+    console.log("New person", newPerson);
+    persons = [...persons, newPerson];
+    console.log("Persons after addition", persons);
+    response.sendStatus(201);
+});
 
 app.delete("/api/persons/:id", (request, response) => {
     const id = Number(request.params.id);

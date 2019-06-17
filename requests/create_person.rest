@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Test person",
+    "number": "+358 15 31337",
+    // The following two should not appear
+    "ignoredAttribute": "should not appear in system",
+    "id": "31337"
+}

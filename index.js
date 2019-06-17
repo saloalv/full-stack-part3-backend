@@ -29,6 +29,18 @@ app.get("/api/persons", (request, response) => {
     response.json(persons);
 });
 
+app.get("/api/persons/:id", (request, response) => {
+    const id = Number(request.params.id);
+    const person = persons.find(p => p.id === id);
+    console.log(`Asked for id ${id}`);
+    console.log("Found person", person);
+    if (person) {
+        response.json(person);
+    } else {
+        response.sendStatus(404);
+    }
+}) 
+
 app.get("/info", (request, response) => {
     console.log("Got request for info page");
     response.send(`

@@ -48,6 +48,24 @@ app.post("/api/persons/", (request, response) => {
     const receivedPerson = request.body;
     console.log("Received person", receivedPerson);
 
+    if (receivedPerson.name === undefined) {
+        console.log("Denied due to missing name");
+        response.status(400).json({error: "Name undefined or missing"});
+        return;
+    }
+    if (receivedPerson.number === undefined) {
+        console.log("Denied due to missing number");
+        response.status(400).json({error: "Number undefined or missing"});
+        return;
+    }
+    const found = persons.find(p => 
+        p.name.toUpperCase() === receivedPerson.name.toUpperCase());
+    if (found !== undefined) {
+        console.log("Denied due to already existing name", found);
+        response.status(409).json({error: "Name already exists"});
+        return;
+    }
+
     // defensively creating new person so that user can't sneak anything in
     const newPerson = {
         name: receivedPerson.name,

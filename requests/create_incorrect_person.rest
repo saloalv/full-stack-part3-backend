@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+// The server is expecting a "name" parameter, and should respond with
+// HTTP 400 if it is missing
+{
+    "firstName": "Arto",
+    "lastName": "Hellas",
+    "number": "+358 15 31337"
+}

@@ -41,12 +41,13 @@ app.get("/api/persons/:id", (request, response) => {
     }
 })
 
-app.delete("/api/persons/:id", (req, res) => {
-    const id = Number(req.params.id);
+app.delete("/api/persons/:id", (request, response) => {
+    const id = Number(request.params.id);
     console.log(`Received request to remove person with id ${id}`);
     console.log("State before", persons);
     persons = persons.filter(p => p.id !== id);
     console.log("State afterwards", persons);
+    response.sendStatus(204);
 })
 
 app.get("/info", (request, response) => {
